@@ -1,0 +1,51 @@
+# docker-compose 2.25 버전부터 version을 명시할 필요가 없어짐.
+
+services:
+  # Front-end : React App
+  web-server:
+    build:
+      context: ./react
+      dockerfile: Dockerfile
+    container_name: my-react-app
+    ports:
+      - "3333:3000"
+
+  # Back-end : SpringBoot REST API Server
+  backend-server:
+    build:
+      context: ./rest-api-server
+      dockerfile: Dockerfile
+    container_name: my-rest-server
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/ohgi_restaurant
+      SPRING_DATASOURCE_USERNAME: ohgiraffers
+      SPRING_DATASOURCE_PASSWORD: ohgiraffers
+    ports:
+      - "8888:8080"
+    volumes:
+      - C:\Users\hi\Desktop\최예진파이널\수업docker\16_docker-AWS-deploy\rest-api-server\src\main\resources\static\productimgs:/springboot-app/productimgs
+    depends_on:
+      - database-server
+
+  # Database : MySQL DBMS
+  database-server:
+    image: mysql:8.0.38
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: qwer1234
+      MYSQL_DATABASE: ohgi_restaurant
+      MYSQL_USER: ohgiraffers
+      MYSQL_PASSWORD: ohgiraffers
+      TZ: Asia/Seoul
+    ports:
+      - "3366:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
+
+volumes:
+  mysql-data:

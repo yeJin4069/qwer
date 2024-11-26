@@ -1,0 +1,69 @@
+# server config
+server:
+port: 8080
+
+spring:
+# DB config
+datasource:
+driver-class-name: com.mysql.cj.jdbc.Driver
+# Local Dev & Docker(Local & AWS) deploy
+url: jdbc:mysql://database-server:3306/ohgi_restaurant
+username: ohgiraffers
+password: ohgiraffers
+# fileupload config
+servlet:
+multipart:
+enabled: true
+max-request-size: 10MB
+max-file-size: 1MB
+web:
+resources:
+static-locations: classpath:/productimgs/
+# JPA config
+jpa:
+generate-ddl: false
+database: mysql
+properties:
+hibernate:
+format_sql: true
+highlight_sql: true
+use_sql_comments: true
+
+# static resource(image media file) config
+## ???? ??? ??? ??? ? ??? ?? ??
+image:
+#  # Local Dev
+#  add-resource-locations: classpath:/static/productimgs/
+#  add-resource-handler: /productimgs/**
+#  # Local Dev
+#  image-dir: src/main/resources/static/productimgs
+#  image-url: http://localhost:8080/productimgs/
+# Docker(Local)
+#  add-resource-locations: file:///springboot-app/productimgs/
+#  add-resource-handler: /productimgs/**
+#  # Docker(Local)
+#  image-dir: /springboot-app/productimgs
+#  image-url: http://localhost:8888/productimgs/
+# Docker(AWS)
+add-resource-locations: file:///springboot-app/productimgs/
+add-resource-handler: /productimgs/**
+# Docker(AWS)
+image-dir: /springboot-app/productimgs
+image-url: http://travel-buddy.me:8080/productimgs/
+
+# security(jwt) config
+jwt:
+secret: BWQ3NDiE+stVlnYfuLeHZ0i2hIRhoGZKIrHAnj0OPedv3aBEOPWJQ9KqqmH/XYWam6MeGG8+7gs2Rbs5ID0Vdg==
+
+
+# springdoc open-api config
+springdoc:
+swagger-ui:
+path: /swagger-ui.html
+
+# logging config
+logging:
+level:
+root: info
+org.hibernate.SQL: debug
+org.hibernate.orm.jdbc.bind: trace
